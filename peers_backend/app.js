@@ -1,6 +1,7 @@
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
-const uri = `mongodb+srv://admin:admin@peers.wsqfc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = process.env.DB_ADMIN_LINK;
 
 const app = express()
 const port = 3000
