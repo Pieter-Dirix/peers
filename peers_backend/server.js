@@ -1,3 +1,5 @@
+//https://bezkoder.com/node-js-mongodb-auth-jwt/
+//https://medium.com/@sergio13prez/connecting-to-mongodb-atlas-d1381f184369
 require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
@@ -26,17 +28,21 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+require('./app/routes/auth.routes')(app);
+require('./app/routes/user.routes')(app);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-// https://medium.com/@sergio13prez/connecting-to-mongodb-atlas-d1381f184369
+
 db.mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
 .then(() => {
-  console.log(`MongoDB Connected…`)
+  console.log(`MongoDB Connected…`);
+  initial();
 })
 .catch(err => console.log(err));
 

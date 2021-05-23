@@ -6,7 +6,7 @@ const Role = db.role;
 let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
+module.exports.signup = (req, res) => {
     const user = new User({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -58,7 +58,7 @@ exports.signup = (req, res) => {
     });
 }
 
-exports.signin = (req, res) => {
+module.exports.signin = (req, res) => {
     User.findOne({ email: req.body.email })
     .populate("roles","-__v")
     .exec((err, user) => {
