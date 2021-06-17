@@ -34,7 +34,7 @@ module.exports.signup = (req, res) => {
                         return;
                     }
 
-                    res.send({ message: "User was registered successfully" })
+                    res.send(user);
                 });
             });
         } else {
@@ -51,7 +51,7 @@ module.exports.signup = (req, res) => {
                         return;
                     }
 
-                    res.send({ message: "user was registered successfully" });
+                    res.send(user);
                 });
             });
         }

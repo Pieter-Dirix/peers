@@ -1,61 +1,48 @@
-
 import "package:flutter/material.dart";
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:peers/view/screens/auth/SignIn.dart';
+import 'package:peers/view/screens/Home.dart';
+import 'package:peers/view/screens/auth/SignUp.dart';
 
-void main() => runApp(Peers());
+import 'Models/User.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Widget _home = SignIn();
+  bool token = await tokenInSecureStorage();
+  if(token) {
+    _home = Home();
+  }
+  runApp(Peers(home: _home));
+}
+
+Future<bool> tokenInSecureStorage() async {
+  final storage = new FlutterSecureStorage();
+  String? value = await storage.read(key: "accessToken");
+  print(value);
+
+  if (value != null) {
+    return Future<bool>.value(true);
+  }
+  return Future<bool>.value(false);
+}
 
 class Peers extends StatelessWidget {
+  const Peers({Key? key, required this.home}) : super(key: key);
+  final Widget home;
 
-  const Peers({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Peers",
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Peers"),
-        ),
-        body: Center(
-          child: SignUpButton(),
-        ),
-      ),
-    );
-  }
-}
-
-class EmailInput extends StatefulWidget {
-  @override
-  _EmailInputState createState() => _EmailInputState();
-}
-
-class _EmailInputState extends State<EmailInput> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-
-class SignUpButton extends StatefulWidget {
-  @override
-  _SignUpButtonState createState() => _SignUpButtonState();
-}
-
-class _SignUpButtonState extends State<SignUpButton> {
-  void _signUp() {
-    print("tapped");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ElevatedButton(
-            onPressed: _signUp,
-            child: Text("Sign Up")
-        ),
-      ],
+      home: home,
+      routes: {
+        Home.routeName: (context) => Home(),
+        SignIn.routeName: (context) => SignIn(),
+        SignUp.routeName: (context) => SignUp(),
+      },
     );
   }
 }

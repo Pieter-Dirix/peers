@@ -1,0 +1,74 @@
+import 'dart:async';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path/path.dart';
+import 'package:peers/models/User.dart';
+import 'package:sqflite/sqflite.dart';
+
+class DBHelper {
+  static final DBHelper _dbHelper = DBHelper._internal();
+
+  String tblUser = "USER";
+  String colId = "id";
+  String colFirstname = "firstname";
+  String colLastname = "lastname";
+  String colEmail = "email";
+
+  DBHelper._internal();
+
+  factory DBHelper() {
+    return _dbHelper;
+  }
+
+  static Database? _db;
+
+  Future<Database> get db async {
+    if (_db == null) {
+      _db = await initializeDB();
+    }
+    return _db!;
+  }
+
+  Future<Database> initializeDB() async {
+    String path = join(await getDatabasesPath(), "user_database.db");
+    var dbUsers = await openDatabase(path, version: 1, onCreate: (db, version) {
+      return db.execute(
+          "CREATE TABLE USER ($colId STRING PRIMARY KEY, $colFirstname TEXT, " +
+              "$colLastname TEXT, $colEmail TEXT)");
+    });
+    return dbUsers;
+  }
+
+  // Future<User> getUser(User user)  async  {
+  //   Database db = await this.db;
+  //   List<Map> result = await db.rawQuery('SELECT * FROM $tblUser WHERE id=?', [user.id]);
+  //
+  //   if(result.length != 0) {
+  //     return user;
+  //   }else {
+  //
+  //   }
+  // }
+
+
+
+  Future<bool> checkIfUserExists(User user) async {
+    Database db = await this.db;
+    List<Map> result =
+        await db.rawQuery('SELECT * FROM $tblUser WHERE id=?', [user.id]);
+
+    if (result.length != 0) {
+      return Future<bool>.value(true);
+    } else {
+      return Future<bool>.value(false);
+    }
+  }
+
+  Future<void> insertUser(User user) async {
+    Database db = await this.db;
+    final bool exists = await checkIfUserExists(user);
+    if (!exists) {
+      await db.insert(tblUser, user.toLocalDB());
+    }
+  }
+}
