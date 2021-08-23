@@ -1,5 +1,6 @@
 const config = require("../config/auth.config");
 const db = require("../models");
+const multer = require('multer');
 const User = db.user;
 const Role = db.role;
 
@@ -7,11 +8,25 @@ let jwt = require("jsonwebtoken");
 let bcrypt = require("bcryptjs");
 
 module.exports.signup = (req, res) => {
-    const user = new User({
+    
+    
+    const file = req.file;
+    if(!file) {
+        res.status(400).send({message: 'Please upload a file'});
+    }
+
+    
+    
+      const user = new User({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        gender: req.body.gender,
+        school: req.body.school,
+        bio: req.body.bio,
+        pfp: file.path
+
     });
 
     user.save( (err, user) => {

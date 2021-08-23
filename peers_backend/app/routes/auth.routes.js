@@ -1,3 +1,6 @@
+
+const multer = require('multer');
+
 const {
     verifySignUp
 } = require("../middleware");
@@ -9,14 +12,24 @@ module.exports = function (app) {
             "Access-Control-Allow-Headers",
             "x-access-token, Origin, Content-Type, Accept"
         );
+        express.static(__dirname+'/pfp');
         next();
     });
-
+    var storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, 'uploads')
+        },
+        filename: function (req, file, cb) {
+          cb(null, new Date().toISOString()+file.originalname)
+        }
+      })
+    var upload = multer({ storage: storage })
     app.post(
         "/signup",
         [
             verifySignUp.checkDuplicateEmail,
-            verifySignUp.checkRolesExisted
+            verifySignUp.checkRolesExisted, 
+            upload.single('profilepicture')
         ],
         controller.signup
     )

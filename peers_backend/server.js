@@ -4,6 +4,7 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const multer = require('multer');
 const uri = process.env.DB_ADMIN_LINK;
 
 const app = express()
@@ -15,6 +16,20 @@ const Role = db.role;
 let corsOptions = {
   origin: "http://localhost:3000"
 }
+
+
+//https://medium.com/flutter-community/flutter-file-upload-using-multer-node-js-and-mongodb-5ba4da44453e
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'pfp')
+  },
+
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname
+    )
+  }
+})
+
 
 app.use(cors(corsOptions));
 
@@ -40,21 +55,21 @@ db.mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => {
-  console.log(`MongoDB Connected…`);
-  initial();
-})
-.catch(err => console.log(err));
+  .then(() => {
+    console.log(`MongoDB Connected…`);
+    initial();
+  })
+  .catch(err => console.log(err));
 
 function initial() {
-  Role.estimatedDocumentCount( (err, count) => {
+  Role.estimatedDocumentCount((err, count) => {
 
-    if(!err && count === 0) {
+    if (!err && count === 0) {
 
       new Role({
         name: "user"
-      }).save( err => {
-        if(err) {
+      }).save(err => {
+        if (err) {
           console.log('error', err);
         }
 
@@ -63,8 +78,8 @@ function initial() {
 
       new Role({
         name: 'admin'
-      }).save( err => {
-        if(err) {
+      }).save(err => {
+        if (err) {
           console.log('error', err);
         }
 
