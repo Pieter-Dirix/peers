@@ -50,8 +50,6 @@ class DBHelper {
   //   }
   // }
 
-
-
   Future<bool> checkIfUserExists(User user) async {
     Database db = await this.db;
     List<Map> result =
@@ -64,11 +62,45 @@ class DBHelper {
     }
   }
 
+  Future<User> getUser() async {
+    final storage = new FlutterSecureStorage();
+    String? id = await storage.read(key: "id");
+    Database db = await this.db;
+    try {
+
+      List<Map> result =
+          await db.rawQuery('SELECT * FROM $tblUser WHERE id=?', [id]);
+
+      return Future<User>.value(User.fromLocalDB(result[0]));
+    } catch (e) {
+      print(e.toString());
+      throw ("Getting user failed");
+    }
+  }
+
   Future<void> insertUser(User user) async {
     Database db = await this.db;
     final bool exists = await checkIfUserExists(user);
     if (!exists) {
       await db.insert(tblUser, user.toLocalDB());
     }
+  }
+
+  Future<bool> removeUser(User user) async {
+    Database db = await this.db;
+    final storage = new FlutterSecureStorage();
+    await storage.write(key: "accessToken", value: null);
+    try {
+      int result =
+          await db.rawDelete('DELETE FROM $tblUser WHERE id=?', [user.id]);
+
+
+      if (result == 1) {
+        return Future<bool>.value(true);
+      }
+    } catch (e) {
+      throw('Logging out failed ${e.toString()}');
+    }
+    return Future<bool>.value(false);
   }
 }

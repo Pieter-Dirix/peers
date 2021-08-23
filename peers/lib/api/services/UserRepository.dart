@@ -24,6 +24,7 @@ class UserRepository {
     await storage.write(key: "accessToken", value: user.accessToken);
     await storage.write(key: "id", value: user.id);
 
+
     localDB.insertUser(user);
 
     return user;
@@ -34,11 +35,31 @@ class UserRepository {
     User u;
     try {
       dynamic signUpResp = await _userService.postRequest("/signup", user);
-      u = User.fromJson(signUpResp);
 
-      return await this.signIn(u.email, user["password"]);
+
+      u = User.fromJson(signUpResp);
+      print(u);
+      User result = await this.signIn(u.email, user["password"]);
+      return result;
     } catch (e) {
+      print(e.toString());
       throw ("Sign up failed");
     }
   }
+
+  // Future<User> addExtraInfo(User user, Map<String, dynamic> extraInfo) async {
+  //   User u;
+  //   try {
+  //     dynamic signUpResp = await _userService.postRequest("/signup", user.toDB());
+  //
+  //     u = User.fromJson(signUpResp);
+  //     print(u);
+  //     // User result = await this.signIn(u.email, user["password"]);
+  //     // return result;
+  //   } catch (e) {
+  //     print(e.toString());
+  //     throw ("Sign up failed");
+  //   }
+  // }
+
 }

@@ -25,7 +25,10 @@ class _SignInState extends State<SignIn> {
       String email = _emailCont.text.trim();
       String password = _passwordCont.text.trim();
       UserRepository().signIn(email, password).then((value) {
-        Navigator.pushReplacementNamed(context, Home.routeName);
+        print('sign in: ${value.toString()}');
+        //https://stackoverflow.com/questions/53304340/navigator-pass-arguments-with-pushnamed
+        Navigator.of(context).pushReplacementNamed(Home.routeName, arguments: value);
+        // Navigator.pushReplacementNamed(context, Home.routeName, arguments: value);
       }).catchError((e) {
         print("error: $e");
       });

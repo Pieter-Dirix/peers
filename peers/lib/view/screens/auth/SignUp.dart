@@ -5,6 +5,7 @@ import 'package:peers/API/API.dart';
 import 'package:peers/models/User.dart';
 import 'package:peers/api/services/UserRepository.dart';
 import 'package:peers/view/screens/Home.dart';
+import 'package:peers/view/screens/auth/SignUpCont.dart';
 
 class SignUp extends StatefulWidget {
   static const routeName = '/signup';
@@ -27,11 +28,11 @@ class _SignUpState extends State<SignUp> {
   void _submitForm(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       User u = User(firstname: _firstnameCont.text, lastname: _lastnameCont.text, email: _emailCont.text, password: _passwordCont.text);
-      UserRepository().signUp(u.toDB()).then((value) {
-        Navigator.pushReplacementNamed(context, Home.routeName);
-      }).catchError((e) {
-        print("error: $e");
-      });
+    //  UserRepository().signUp(u.toDB()).then((value) {
+        Navigator.of(context).pushReplacementNamed(SignUpCont.routeName, arguments: u);
+      // }).catchError((e) {
+      //   print("error: $e");
+      // });
     }
 
 
@@ -58,7 +59,7 @@ class _SignUpState extends State<SignUp> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Sign in",
+                "Sign up",
                 textDirection: TextDirection.ltr,
                 style: TextStyle(
                     fontSize: 24,
@@ -129,7 +130,7 @@ class _SignUpState extends State<SignUp> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        child: Text("Submit"),
+                        child: Text("Next"),
                         onPressed: () => _submitForm(context),
                       ),
                     ],
