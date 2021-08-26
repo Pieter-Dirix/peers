@@ -35,6 +35,21 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  Widget info() {
+    print(widget.user!);
+    return Expanded(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text('${widget.user!.firstname} ${widget.user!.lastname}'),
+        Text('${widget.user!.gender}'),
+        Text('${widget.user!.school}'),
+        Text('${widget.user!.bio}', overflow: TextOverflow.clip,),
+      ],
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +57,7 @@ class _ProfileState extends State<Profile> {
           child: Column(
         children: [
           (widget.user != null)
-              ? Text('${widget.user!.firstname} ${widget.user!.lastname}')
+              ? info()
               : Text("iets misgegaan"),
           ElevatedButton(
             child: Text("log out"),

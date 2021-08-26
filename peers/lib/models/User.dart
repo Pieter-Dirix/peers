@@ -1,8 +1,3 @@
-import 'dart:html';
-
-import 'package:flutter/material.dart';
-import 'package:objectid/objectid.dart';
-
 class User {
   String? id;
   String firstname;
@@ -13,7 +8,7 @@ class User {
   String? gender;
   String? school;
   String? bio;
-  String? pfp;
+  List? events;
 
   User(
       {required this.firstname,
@@ -25,31 +20,34 @@ class User {
       this.gender,
       this.school,
       this.bio,
-      this.pfp});
+      this.events});
 
   factory User.fromJson(Map<dynamic, dynamic> json) {
+    print(json);
     return User(
-        id: json['id'],
-        firstname: json['firstname'],
-        lastname: json['lastname'],
-        email: json['email'],
-        accessToken: json['accessToken'],
-        gender: json['gender'],
-        school: json['school'],
-        bio: json['bio'],
-        pfp: json['pfp']);
+      id: json['id'],
+      firstname: json['firstname'],
+      lastname: json['lastname'],
+      email: json['email'],
+      accessToken: json['accessToken'],
+      gender: json['gender'],
+      school: json['school'],
+      bio: json['bio'],
+      events: json['events'],
+    );
   }
 
   factory User.fromLocalDB(Map<dynamic, dynamic> json) {
     return User(
-        id: json['id'],
-        firstname: json['firstname'],
-        lastname: json['lastname'],
-        email: json['email'],
-        gender: json['gender'],
-        school: json['school'],
-        bio: json['bio'],
-        pfp: json['pfp']);
+      id: json['id'],
+      firstname: json['firstname'],
+      lastname: json['lastname'],
+      email: json['email'],
+      gender: json['gender'],
+      school: json['school'],
+      bio: json['bio'],
+      events: json['events'],
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -61,7 +59,7 @@ class User {
         "gender": gender,
         "school": school,
         "bio": bio,
-        "pfp": pfp,
+        "events": events,
       };
 
   Map<String, dynamic> toLocalDB() => {
@@ -72,7 +70,7 @@ class User {
         "gender": gender,
         "school": school,
         "bio": bio,
-        "pfp": pfp,
+        "events": events,
       };
 
   Map<String, dynamic> toDB() => {
@@ -83,14 +81,16 @@ class User {
         "gender": gender,
         "school": school,
         "bio": bio,
-        "pfp": pfp,
+        "events": events,
       };
-
-
 
   @override
   String toString() {
     // TODO: implement toString
-    return '${this.firstname} ${this.lastname} ${this.email} ${this.accessToken}';
+    return '${this.firstname} ${this.lastname} ${this.email} ${this.gender} ${this.school} ${this.bio}';
+  }
+
+  String initials() {
+    return '${this.firstname[0].toUpperCase()}${this.lastname[0].toUpperCase()}';
   }
 }

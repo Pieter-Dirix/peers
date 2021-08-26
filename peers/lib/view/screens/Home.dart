@@ -1,13 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:path/path.dart';
-import 'package:peers/api/services/UserRepository.dart';
-import 'package:peers/main.dart';
 import 'package:peers/models/User.dart';
 import 'package:peers/util/DBHelper.dart';
-import 'package:peers/view/screens/auth/SignIn.dart';
-import 'package:peers/main.dart';
 
 import 'home/Profile.dart';
 import 'home/Match.dart';
@@ -45,21 +39,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
 
   Widget getPage(int index, User user) {
     // Widget page = Profile();
-
     return IndexedStack(
       index: index,
       children: <Widget>[Match(user: user), Profile(user: user)],
     );
 
-    // switch (index) {
-    //   case 0:
-    //     page = Match(user: user);
-    //     break;
-    //   case 1:
-    //     page = Profile(user: user);
-    //     break;
-    // }
-    // return page;
   }
 
   Widget returnHome() {

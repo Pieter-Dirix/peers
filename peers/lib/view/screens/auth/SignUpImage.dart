@@ -32,12 +32,6 @@ class _SignUpImageState extends State<SignUpImage> {
     });
   }
 
-  String _initials(User user) {
-    String result = '';
-    result =
-        '${user.firstname[0].toUpperCase()}${user.lastname[0].toUpperCase()}';
-    return result;
-  }
 
   void _submitImage(BuildContext context) {
     if(_image != null) {
@@ -48,7 +42,7 @@ class _SignUpImageState extends State<SignUpImage> {
             .pushReplacementNamed(Home.routeName, arguments: value);
 
       }).catchError((e){
-        print(e.toString());
+        print('hier ${e.toString()}');
       });
       // Navigator.of(context)
       //     .pushReplacementNamed(Home.routeName, arguments: widget.user!);
@@ -72,7 +66,7 @@ class _SignUpImageState extends State<SignUpImage> {
               : CircleAvatar(
                   radius: 100,
                   backgroundColor: Colors.grey,
-                  child: Text(_initials(widget.user!)),
+                  child: Text(widget.user!.initials()),
                 ),
           Center(
               child: Row(

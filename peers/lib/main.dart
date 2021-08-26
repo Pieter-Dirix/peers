@@ -1,15 +1,7 @@
 import "package:flutter/material.dart";
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:peers/util/DBHelper.dart';
 import 'package:peers/util/SecureStorage.dart';
 import 'package:peers/util/RouteGenerator.dart';
-import 'package:peers/view/screens/auth/SignIn.dart';
-import 'package:peers/view/screens/auth/SignUp.dart';
-import 'package:peers/view/screens/Home.dart';
-import 'package:peers/view/screens/home/Match.dart';
-import 'package:peers/view/screens/home/Profile.dart';
 
-import 'Models/User.dart';
 
 SecureStorage secureStorage = SecureStorage();
 

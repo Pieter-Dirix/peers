@@ -10,13 +10,16 @@ const User = mongoose.model(
         gender: String,
         school: String,
         bio: String,
-        profilepicture: {
-            type: String
-        },
         roles: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Role"
+            }
+        ],
+        events:  [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Event"
             }
         ]
     })

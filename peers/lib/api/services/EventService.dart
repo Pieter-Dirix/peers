@@ -1,18 +1,26 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:path/path.dart';
-import 'package:peers/api/services/BaseService.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:peers/api/api_exception.dart';
+import 'package:peers/api/services/BaseService.dart';
 
-import '../api_exception.dart';
+class EventService extends BaseService {
+  final storage = new FlutterSecureStorage();
 
-class UserService extends BaseService {
   @override
   Future getResponse(String url) async {
     dynamic responseJson;
     try {
-      final response = await http.get(Uri.parse(baseUrl + url));
-      responseJson = returnResponse(response);
+      String? token = await storage.read(key: "accessToken");
+      if (token != null) {
+        final response = await http.get(Uri.parse(baseUrl + url),
+            headers: <String, String>{'x-access-token': token});
+        responseJson = returnResponse(response);
+      } else {
+        throw "No access token";
+      }
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
@@ -24,12 +32,19 @@ class UserService extends BaseService {
     dynamic responseJson;
     Uri uri = Uri.parse(baseUrl + url);
     try {
-      final response = await http.post(uri,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode(body));
-      responseJson = returnResponse(response);
+      String? token = await storage.read(key: "accessToken");
+
+      if (token != null) {
+        final response = await http.post(uri,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'x-access-token': token
+            },
+            body: jsonEncode(body));
+        responseJson = returnResponse(response);
+      } else {
+        throw "No access token";
+      }
 
       //print(responseJson);
     } on SocketException {
@@ -55,6 +70,4 @@ class UserService extends BaseService {
                 ' with status code : ${response.statusCode}');
     }
   }
-
-
 }

@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:peers/models/User.dart';
 import 'package:peers/api/services/BaseService.dart';
@@ -25,20 +23,20 @@ class UserRepository {
     await storage.write(key: "id", value: user.id);
 
 
-    localDB.insertUser(user);
+    await localDB.insertUser(user);
 
     return user;
   }
 
   
   Future<User> signUp(Map<String, dynamic> user) async {
+    print('repo: $user' );
     User u;
     try {
       dynamic signUpResp = await _userService.postRequest("/signup", user);
 
 
       u = User.fromJson(signUpResp);
-      print(u);
       User result = await this.signIn(u.email, user["password"]);
       return result;
     } catch (e) {
@@ -46,20 +44,5 @@ class UserRepository {
       throw ("Sign up failed");
     }
   }
-
-  // Future<User> addExtraInfo(User user, Map<String, dynamic> extraInfo) async {
-  //   User u;
-  //   try {
-  //     dynamic signUpResp = await _userService.postRequest("/signup", user.toDB());
-  //
-  //     u = User.fromJson(signUpResp);
-  //     print(u);
-  //     // User result = await this.signIn(u.email, user["password"]);
-  //     // return result;
-  //   } catch (e) {
-  //     print(e.toString());
-  //     throw ("Sign up failed");
-  //   }
-  // }
 
 }

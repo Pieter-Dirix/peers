@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:peers/models/User.dart';
-import 'package:peers/util/DBHelper.dart';
 import 'package:peers/util/SecureStorage.dart';
 import 'package:peers/view/screens/auth/SignIn.dart';
 import 'package:peers/view/screens/auth/SignUp.dart';
 import 'package:peers/view/screens/Home.dart';
 import 'package:peers/view/screens/auth/SignUpCont.dart';
 import 'package:peers/view/screens/auth/SignUpImage.dart';
-import 'package:peers/view/screens/home/Match.dart';
-import 'package:peers/view/screens/home/Profile.dart';
+import 'package:peers/view/screens/home/event/CreateEvent.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,7 +18,6 @@ class RouteGenerator {
 
       case Home.routeName:
         if (args is User) {
-          print('route generator: ${args.toString()}');
           return MaterialPageRoute(builder: (context) => Home(user: args));
         } else {
           return MaterialPageRoute(builder: (context) => Home());
@@ -33,7 +30,6 @@ class RouteGenerator {
 
       case SignUpCont.routeName :
       if (args is User) {
-        print('route generator: ${args.toString()}');
         return MaterialPageRoute(builder: (context) => SignUpCont(user: args));
       } else {
         return MaterialPageRoute(builder: (context) => SignUpCont());
@@ -41,10 +37,16 @@ class RouteGenerator {
 
       case SignUpImage.routeName:
         if (args is User) {
-          print('route generator: ${args.toString()}');
           return MaterialPageRoute(builder: (context) => SignUpImage(user: args));
         } else {
           return MaterialPageRoute(builder: (context) => SignUpImage());
+        }
+
+      case CreateEvent.routeName:
+        if (args is User) {
+          return MaterialPageRoute(builder: (context) => CreateEvent(user: args));
+        } else {
+          return MaterialPageRoute(builder: (context) => CreateEvent());
         }
       default:
         return _errorRoute();

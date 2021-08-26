@@ -5,6 +5,7 @@ const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
+    console.log("jwt check");
     let token = req.headers['x-access-token'];
 
     if(!token) {

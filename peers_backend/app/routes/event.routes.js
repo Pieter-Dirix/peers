@@ -1,8 +1,8 @@
 const express = require('express');
 const {
-    verifySignUp
+    verifySignUp, authJwt
 } = require("../middleware");
-const controller = require("../controllers/auth.controller");
+const controller = require("../controllers/event.controller");
 
 module.exports = function (app) {
     app.use((req, res, next) => {
@@ -10,19 +10,24 @@ module.exports = function (app) {
             "Access-Control-Allow-Headers",
             "x-access-token, Origin, Content-Type, Accept"
         );
-        
+
         next();
     });
 
     app.post(
-        "/signup",
+        "/addevent",
         [
-            verifySignUp.checkDuplicateEmail,
-            verifySignUp.checkRolesExisted, 
+            authJwt.verifyToken,
         ],
-        controller.signup
+        controller.addevent
     )
 
-    app.post("/signin", controller.signin );
+    app.get(
+        "/getevents/:userId", 
+        [
+            authJwt.verifyToken,
+        ], 
+        controller.getevents
+    );
 
 };

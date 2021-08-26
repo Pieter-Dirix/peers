@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:peers/api/services/UserRepository.dart';
 import 'package:peers/models/User.dart';
+import 'package:peers/view/screens/Home.dart';
 import 'package:peers/view/screens/auth/SignUpImage.dart';
 import 'package:flutter/services.dart';
-
-import '../Home.dart';
-
 
 class SignUpCont extends StatefulWidget {
   static const routeName = '/signupcont';
@@ -33,19 +31,30 @@ class _SignUpContState extends State<SignUpCont> {
 
   void _submitForm(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+
       widget.user!.school = _schoolCont.text;
       widget.user!.bio = _bioCont.text;
       widget.user!.gender = _gender;
+      User u = User(
+          firstname: widget.user!.firstname,
+          lastname: widget.user!.lastname,
+          email: widget.user!.email,
+          password: widget.user!.password,
+          bio: _bioCont.text,
+          gender: this._gender,
+          school: _schoolCont.text
+      );
+      print(u);
       // User u = User(firstname: _firstnameCont.text,
       //     lastname: _lastnameCont.text,
       //     email: _emailCont.text,
       //     password: _passwordCont.text);
-    //   UserRepository().addExtraInfo(u.toDB()).then((value) {
+      UserRepository().signUp(u.toDB()).then((value) {
         Navigator.of(context)
-            .pushReplacementNamed(SignUpImage.routeName, arguments: widget.user!);
-    //   }).catchError((e) {
-    //     print("error: $e");
-    //   });
+            .pushReplacementNamed(Home.routeName, arguments: value);
+      }).catchError((e) {
+        print("error: $e");
+      });
     }
   }
 
@@ -128,7 +137,7 @@ class _SignUpContState extends State<SignUpCont> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                child: Text("Next"),
+                child: Text("Submit"),
                 onPressed: () => _submitForm(context),
               ),
             ],

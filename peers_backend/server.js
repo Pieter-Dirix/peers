@@ -4,7 +4,6 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const multer = require('multer');
 const uri = process.env.DB_ADMIN_LINK;
 
 const app = express()
@@ -19,19 +18,10 @@ let corsOptions = {
 
 
 //https://medium.com/flutter-community/flutter-file-upload-using-multer-node-js-and-mongodb-5ba4da44453e
-let storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'pfp')
-  },
-
-  filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname
-    )
-  }
-})
 
 
-app.use(cors(corsOptions));
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -45,9 +35,10 @@ app.get('/', (req, res) => {
 
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+require('./app/routes/event.routes')(app);
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Peers listening at http://localhost:${port}`)
 })
 
 

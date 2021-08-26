@@ -13,7 +13,10 @@ class DBHelper {
   String colFirstname = "firstname";
   String colLastname = "lastname";
   String colEmail = "email";
-
+  String colGender = "gender";
+  String colSchool = "school";
+  String colBio = "bio";
+  String colEvents = "events";
   DBHelper._internal();
 
   factory DBHelper() {
@@ -34,7 +37,7 @@ class DBHelper {
     var dbUsers = await openDatabase(path, version: 1, onCreate: (db, version) {
       return db.execute(
           "CREATE TABLE USER ($colId STRING PRIMARY KEY, $colFirstname TEXT, " +
-              "$colLastname TEXT, $colEmail TEXT)");
+              "$colLastname TEXT, $colEmail TEXT, $colGender TEXT, $colSchool TEXT, $colBio TEXT, $colEvents TEXT )");
     });
     return dbUsers;
   }

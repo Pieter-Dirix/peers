@@ -3,6 +3,7 @@ const ROLES = db.ROLES;
 const User = db.user;
 
 checkDuplicateEmail = (req, res, next) => {
+    console.log(req.body);
     User.findOne({
         email: req.body.email
     }).exec((err, user) => {
@@ -12,8 +13,8 @@ checkDuplicateEmail = (req, res, next) => {
             })
             return;
         }
-
         if (user) {
+            console.log("here");
             res.status(400).send({
                 message: 'This email is already in use'
             })
